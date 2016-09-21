@@ -58,20 +58,20 @@ exports.recursionAnswers = {
   },
 
   validParentheses: function(n) {
-      if (n == 0) {
-          return [""];
-      }
-
       var result = [];
-      for (var i = 0; i < n; i++) {
-          var lefts = this.validParentheses(i);
-          var rights = this.validParentheses(n - 1 - i);
-          for (var l = 0; l < lefts.length; l++) {
-              for (var r = 0; r < rights.length; r++) {
-                  result.push("(" + lefts[l] + ")" + rights[r]);
+      var helper = function(comb, open, close, pairs) {
+          if (open == pairs && close == pairs) {
+              result.push(comb);
+          } else {
+              if (open < pairs) {
+                  helper(comb + "(", open + 1, close, pairs);
+              }
+              if (close < open) {
+                  helper(comb + ")", open, close + 1, pairs);
               }
           }
-      }
+      };
+      helper("", 0, 0, n);
       return result;
   }
 };
