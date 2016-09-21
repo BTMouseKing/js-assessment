@@ -27,14 +27,51 @@ exports.recursionAnswers = {
   },
 
   permute: function(arr) {
-
+      var permutations = [];
+      var permute_helper = function(arr, index) {
+          if (index >= arr.length - 1) {
+              permutations.push(arr.slice());
+          } else {
+              for (var i = index; i < arr.length; i++) {
+                  var temp = arr[index];
+                  arr[index] = arr[i];
+                  arr[i] = temp;
+                  permute_helper(arr, index + 1);
+                  temp = arr[index];
+                  arr[index] = arr[i];
+                  arr[i] = temp;
+              }
+          }
+      };
+      permute_helper(arr, 0);
+      return permutations;
   },
 
   fibonacci: function(n) {
-
+      if (n == 0) {
+          return 0;
+      } else if (n == 1) {
+          return 1;
+      } else {
+          return this.fibonacci(n - 1) + this.fibonacci(n - 2);
+      }
   },
 
   validParentheses: function(n) {
+      if (n == 0) {
+          return [""];
+      }
 
+      var result = [];
+      for (var i = 0; i < n; i++) {
+          var lefts = this.validParentheses(i);
+          var rights = this.validParentheses(n - 1 - i);
+          for (var l = 0; l < lefts.length; l++) {
+              for (var r = 0; r < rights.length; r++) {
+                  result.push("(" + lefts[l] + ")" + rights[r]);
+              }
+          }
+      }
+      return result;
   }
 };
